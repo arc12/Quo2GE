@@ -1,0 +1,181 @@
+<html>
+<head>
+  <title>Sample</title>
+  <script type="text/javascript" src="https://www.google.com/jsapi"> </script>
+  
+  <script type="text/javascript">
+	// grab the sub-folder of the config file JS and execute it
+	// This locates the KML and defines title and user controls that will be dynamically created later on
+	var configFolder=window.location.search.slice(1);
+	if(configFolder=="") configFolder=".";
+	var script = document.createElement('script');
+	script.setAttribute('src',configFolder+"/config.js");
+	document.head.appendChild(script);
+
+	//basic GE pre-loadS
+    var ge;
+    google.load("earth", "1", {"other_params":"sensor=false"});
+	
+	// Use data in config.js to set title and form controls to direct GE view
+	// called by body onLoad event
+	function setControls(){
+		//title and heading
+		document.title=title;
+		document.getElementById("heading1").innerHTML=title;
+		
+		//viewpoints
+		if(viewpoints!=null){
+			var divVP = document.getElementById('divViewpoints');
+			divVP.innerHTML="Go to Viewpoint: ";
+			var ctrl="<select id='viewpointSelect' onChange='gotoViewpoint(this.options[this.selectedIndex].text);'>";
+			ctrl+="<option value=''></option>";
+			for (var vp in viewpoints){
+				ctrl+="<option value='"+vp+"'>"+vp+"</option>";
+			}
+			ctrl+="</select>";
+			divVP.innerHTML+=ctrl
+		}
+		
+		//sites to visit
+		if(sites!=null){
+			var divSites = document.getElementById('divSites');
+			divSites.innerHTML="Locate Field Site: ";
+			var ctrl="<select id='siteSelect' onChange='locateSite(this.options[this.selectedIndex].text);'>";
+			ctrl+="<option value=''></option>";
+			for (var site in sites){
+				ctrl+="<option value='"+site+"'>"+site+"</option>";
+			}
+			ctrl+="</select>";
+			divSites.innerHTML+=ctrl
+		}
+		
+		//visibility selector and colour key
+		if(visibility!=null){
+			var divVisibility = document.getElementById('divVisibility');
+			divVisibility.innerHTML="Visibility:</br>";
+			for (var i=0;i<visibility.length;i++){
+				var v = visibility[i];
+				var ctrl="<span style='background-color:"+v[1]+";'>";
+				ctrl+="<input type='checkbox' checked onClick='setVis(\x22"+v[0]+"\x22, this.checked);'>&nbsp;&nbsp;</input>"
+				ctrl+="</span> "+v[0]+"</br>";
+				divVisibility.innerHTML+=ctrl
+			}			
+		}
+	}
+	
+	// -----------------------------------------------
+	// Functions to setup Google Earth
+	// -----------------------------------------------
+    function init() {
+      google.earth.createInstance('map3d', initCB, failureCB);
+    }
+
+    function initCB(instance) {
+      ge = instance;
+      ge.getWindow().setVisibility(true);
+	  initKML();
+	  initControls();
+    }
+	
+	function initKML(){
+		var link = ge.createLink('');
+		link.setHref(kmlHref);
+		var networkLink = ge.createNetworkLink('');
+		networkLink.set(link, true, true); // Sets the link, refreshVisibility, and flyToView
+		ge.getFeatures().appendChild(networkLink);
+	}
+
+	function initControls(){
+	ge.getNavigationControl().setVisibility(ge.VISIBILITY_SHOW);
+	ge.getTime().getControl().setVisibility(ge.VISIBILITY_HIDE);
+	}
+	
+    function failureCB(errorCode) {
+    }
+
+	// -----------------------------------------------
+	// Functions called by user controls to direct GE
+	// -----------------------------------------------	
+	function toGround(){
+		var cam=ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+		//on the surface (alt=0) and with horizontal view (tilt=90, because tilt=0 is directly overhead)
+		cam.setAltitude(3.0);
+		cam.setTilt(90.0);	
+		//update viewpoint
+		ge.getView().setAbstractView(cam);	
+	}
+	
+		
+	function elevate(){
+		var cam=ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+		cam.setAltitude(200.0);
+		cam.setTilt(80.0);
+		ge.getView().setAbstractView(cam);
+		}
+		
+	function locateSite(site){
+		if(site!=""){		
+			var  lookAt = ge.createLookAt('');
+			lookAt.setLatitude(sites[site][0]);
+			lookAt.setLongitude(sites[site][1]);
+			lookAt.setTilt(45);
+			lookAt.setAltitude(500.0);
+			lookAt.setRange(500.0);
+			ge.getView().setAbstractView(lookAt);
+		}
+	}
+		
+			
+	function setVis(name, visible){
+		var features=ge.getElementsByType("KmlFolder");
+		for (var i=0;i< features.getLength();i++){
+			var f = features.item(i);
+			if(name==f.getName()){
+				f.setVisibility(visible);
+				break;
+			}
+		}
+	}
+	
+	function gotoViewpoint(vp){
+	if(vp!=""){
+		var cam=ge.getView().copyAsCamera(ge.ALTITUDE_RELATIVE_TO_GROUND);
+		cam.setLatitude(viewpoints[vp][0]);
+		cam.setLongitude(viewpoints[vp][1]);
+		cam.setHeading(viewpoints[vp][2]);
+		cam.setAltitude(200.0);
+		cam.setTilt(80.0);
+		ge.getView().setAbstractView(cam);
+		//delayed drop to ground level. note alt=200 previously. this is to avoid bumping into ground when moving
+		setTimeout(toGround,2000);
+		}
+	}
+		
+	// bootstrap for Google Earth
+    google.setOnLoadCallback(init);
+  </script>
+
+</head>
+<h1 id="heading1">Google Earth Demo</h1>
+<body onLoad="setControls();">
+  <div id="map3d" style="height: 750px; width: 900px; float: left;"></div>
+  <div id="controls" style="float: left;">
+	<div id="divViewpoints" style="padding:5px 5px;"></div>
+	<div id="divSites" style="padding:5px 5px;"></div>
+	<div id="divVisibility" style="padding:5px 5px;"></div>
+	<div id="divOther" style="padding:5px 5px;">
+	<input type="checkbox" onClick="ge.getLayerRoot().enableLayerById(ge.LAYER_ROADS, this.checked);">Show Roads</input>
+	</br></br>
+	Height Control:</br>
+	<input type="button" value="Levitate" onClick="elevate();"/>
+	<input type="button" value="To Ground" onClick="toGround();"/>
+	</div>
+	
+  </div>
+  <div id="bottom" style="clear:both;">
+
+	
+	</div>
+
+</body>
+</html>
