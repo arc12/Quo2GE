@@ -51,7 +51,7 @@ namespace Quo2GE
             exportCleanKml();
             exportAllProcessed();
             File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"gm.html"), 
-                        Path.Combine(folderDialog.SelectedPath,"gm.html"));
+                        Path.Combine(folderDialog.SelectedPath,"gm.html"),true);
 
         }
 
