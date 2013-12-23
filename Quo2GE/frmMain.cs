@@ -16,7 +16,7 @@ namespace Quo2GE
         XmlDocument poiKml;
         XmlDocument routeKml;
         XmlDocument geoKml;
-        String[] poiTypes = { "Site", "Landmark", "Viewpoint" };
+        String[] poiTypes = { "Site", "Landmark", "Viewpoint" };// do not change - dependencies
 
         public frmMain()
         {
@@ -26,8 +26,8 @@ namespace Quo2GE
         private void frmMain_Load(object sender, EventArgs e)
         {
             fAbout = new frmAbout();
-            //tabs.Enabled = false;//tabs will be disabled until an output folder is selected
-            openFileDialog.InitialDirectory = @"C:\Users\Adam\Desktop";//temp for testing. delete this line and uncomment previous when finished
+            tabs.Enabled = false;//tabs will be disabled until an output folder is selected
+            //openFileDialog.InitialDirectory = @"C:\Users\Adam\Desktop";//temp for testing. delete this line and uncomment previous when finished
 
             contentType.Items.AddRange(poiTypes);
         }
@@ -345,14 +345,13 @@ namespace Quo2GE
                 }
             }
 
-            allKml.Save(Path.Combine(folderDialog.SelectedPath, "allSets.kml"));
-
             //
             // - now write out the config.js file that is used for dynamic controls creation.
             //
             System.IO.StreamWriter file = new System.IO.StreamWriter(Path.Combine(folderDialog.SelectedPath, "config.js"));
             file.WriteLine("var title='"+txtMainTitle.Text+"';");
-            file.WriteLine("var kmlHref='allSets.kml';");
+            file.WriteLine("//edit the following to give the fully qualified URL");
+            file.WriteLine("var kmlHref='"+txtBaseURL.Text+"allSets.kml';");
             //viewpoints
             file.WriteLine("// locations of viewpoints. data is lat, lon, bearing (from vp)");
             XmlNode F = allKml.SelectSingleNode("//kml:Folder[kml:name='Viewpoint']", xmlnsManager);
@@ -372,7 +371,9 @@ namespace Quo2GE
                     //the default heading is North,
                     // but it may be over-ridden by specifying @WPT-001 in the viewpoint decription
                     int heading = 0;
-                    String desc = p.SelectSingleNode("kml:description", xmlnsManager).InnerText;
+                    XmlNode descNode = p.SelectSingleNode("kml:description", xmlnsManager);
+                    String desc ="";
+                    if(descNode != null) desc= descNode.InnerText;
                     int i1 = desc.IndexOf('@')+1;
                     if (i1 >= 1)
                     {
@@ -436,12 +437,28 @@ namespace Quo2GE
 
             file.Close();
 
+            //
+            // - finalise and write out the KML
+            //
+            //for landmarks, use the description as waymark name (usual case is for the wpt name to be e.g. WPT-001)
+            // this has to be done after JS creation because the waymark names may be used as destinations for viewpoints e.g. @LM-001
+            XmlNodeList landmarks = allKml.SelectNodes("//kml:Folder[kml:name='Landmark']//kml:Folder//kml:Placemark", xmlnsManager);
+            foreach (XmlNode landmark in landmarks)
+            {
+                landmark.SelectSingleNode("./kml:name", xmlnsManager).InnerText = landmark.SelectSingleNode("./kml:description", xmlnsManager).InnerText;
+            }      
+            allKml.Save(Path.Combine(folderDialog.SelectedPath, "allSets.kml"));
+
+
             MessageBox.Show("Saved to " + folderDialog.SelectedPath);
         }
 
         //NB: this is VERY rough and ready calculation. Actually VERY wrong but simple to point us roughly right dirn
+        // X = longitude, Y=latitude
         private int calcHeading(double toX, double toY, double fromX, double fromY){
-            double angRad = Math.Atan2(toY-fromY, toX-fromX);
+            double dY = toY - fromY;
+            double dX = (toX - fromX)*Math.Cos(Math.PI*(toY+fromY)/360);//the distance for 1 deg of long decreases as lat increeases
+            double angRad = Math.Atan2(dY, dX);
             int angDeg = (int)(180 * angRad / Math.PI);
             //convert to conventional headings
             angDeg = 90 - angDeg;

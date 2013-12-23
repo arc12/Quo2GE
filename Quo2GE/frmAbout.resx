@@ -607,7 +607,7 @@
 In Quo, create three groups and export to KML and a supporting config.js file.
 A: a group for points of interest: sites to visit, landmarks, and places that make good viewpoints.
 B: a group containing the walking/driving routes and maybe waypoints at key turns.
-C: a group containing geological/geographical features designated using the Quo "route" tool.
+C: a group containing geological/geographical features designated using the Quo "track" tool.
 
 For A, distinguish between the different kinds of PoI by using waypoint prefixes ending in "-".
 For B and C, distinguish the routes by prefix, changing the default "Track 1" etc.

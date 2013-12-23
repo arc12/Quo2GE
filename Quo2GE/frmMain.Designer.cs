@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.pnlLeft = new System.Windows.Forms.Panel();
+            this.txtBaseURL = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.txtMainTitle = new System.Windows.Forms.TextBox();
             this.btnExport = new System.Windows.Forms.Button();
@@ -92,6 +94,8 @@
             // 
             // pnlLeft
             // 
+            this.pnlLeft.Controls.Add(this.txtBaseURL);
+            this.pnlLeft.Controls.Add(this.label17);
             this.pnlLeft.Controls.Add(this.label14);
             this.pnlLeft.Controls.Add(this.txtMainTitle);
             this.pnlLeft.Controls.Add(this.btnExport);
@@ -100,8 +104,25 @@
             this.pnlLeft.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlLeft.Location = new System.Drawing.Point(0, 0);
             this.pnlLeft.Name = "pnlLeft";
-            this.pnlLeft.Size = new System.Drawing.Size(451, 62);
+            this.pnlLeft.Size = new System.Drawing.Size(473, 84);
             this.pnlLeft.TabIndex = 0;
+            // 
+            // txtBaseURL
+            // 
+            this.txtBaseURL.Location = new System.Drawing.Point(83, 57);
+            this.txtBaseURL.Name = "txtBaseURL";
+            this.txtBaseURL.Size = new System.Drawing.Size(311, 20);
+            this.txtBaseURL.TabIndex = 6;
+            this.txtBaseURL.Text = "http://www.hilltop-cottage.info/vt/";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(9, 60);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(56, 13);
+            this.label17.TabIndex = 5;
+            this.label17.Text = "Base URL";
             // 
             // label14
             // 
@@ -120,7 +141,7 @@
             this.txtMainTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMainTitle.Location = new System.Drawing.Point(83, 6);
             this.txtMainTitle.Name = "txtMainTitle";
-            this.txtMainTitle.Size = new System.Drawing.Size(289, 23);
+            this.txtMainTitle.Size = new System.Drawing.Size(311, 23);
             this.txtMainTitle.TabIndex = 3;
             this.txtMainTitle.Text = "Google Earth Geo";
             // 
@@ -137,7 +158,7 @@
             // btnAbout
             // 
             this.btnAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAbout.Location = new System.Drawing.Point(378, 6);
+            this.btnAbout.Location = new System.Drawing.Point(400, 6);
             this.btnAbout.Name = "btnAbout";
             this.btnAbout.Size = new System.Drawing.Size(69, 23);
             this.btnAbout.TabIndex = 2;
@@ -162,10 +183,10 @@
             this.tabs.Controls.Add(this.tabPage3);
             this.tabs.Controls.Add(this.tabPage1);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabs.Location = new System.Drawing.Point(0, 62);
+            this.tabs.Location = new System.Drawing.Point(0, 84);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(451, 276);
+            this.tabs.Size = new System.Drawing.Size(473, 278);
             this.tabs.TabIndex = 3;
             // 
             // tabPage
@@ -177,7 +198,7 @@
             this.tabPage.Location = new System.Drawing.Point(4, 22);
             this.tabPage.Name = "tabPage";
             this.tabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage.Size = new System.Drawing.Size(443, 250);
+            this.tabPage.Size = new System.Drawing.Size(465, 252);
             this.tabPage.TabIndex = 0;
             this.tabPage.Text = "Points of Interest";
             this.tabPage.UseVisualStyleBackColor = true;
@@ -217,7 +238,7 @@
             this.grpPoiFolder.Enabled = false;
             this.grpPoiFolder.Location = new System.Drawing.Point(128, 58);
             this.grpPoiFolder.Name = "grpPoiFolder";
-            this.grpPoiFolder.Size = new System.Drawing.Size(307, 184);
+            this.grpPoiFolder.Size = new System.Drawing.Size(329, 186);
             this.grpPoiFolder.TabIndex = 8;
             this.grpPoiFolder.TabStop = false;
             this.grpPoiFolder.Text = "Folder Properties";
@@ -257,7 +278,7 @@
             this.contentType.FormattingEnabled = true;
             this.contentType.Location = new System.Drawing.Point(27, 91);
             this.contentType.Name = "contentType";
-            this.contentType.Size = new System.Drawing.Size(272, 21);
+            this.contentType.Size = new System.Drawing.Size(294, 21);
             this.contentType.TabIndex = 6;
             this.contentType.SelectionChangeCommitted += new System.EventHandler(this.contentType_SelectionChangeCommitted);
             // 
@@ -285,7 +306,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFolderTitle.Location = new System.Drawing.Point(27, 41);
             this.txtFolderTitle.Name = "txtFolderTitle";
-            this.txtFolderTitle.Size = new System.Drawing.Size(272, 20);
+            this.txtFolderTitle.Size = new System.Drawing.Size(294, 20);
             this.txtFolderTitle.TabIndex = 4;
             this.txtFolderTitle.Leave += new System.EventHandler(this.txtFolderTitle_Leave);
             // 
@@ -308,7 +329,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(443, 250);
+            this.tabPage2.Size = new System.Drawing.Size(465, 252);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Routes";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -434,7 +455,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(443, 250);
+            this.tabPage3.Size = new System.Drawing.Size(465, 252);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Geo Structures";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -464,9 +485,9 @@
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.Location = new System.Drawing.Point(22, 95);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(41, 13);
+            this.label10.Size = new System.Drawing.Size(77, 13);
             this.label10.TabIndex = 11;
-            this.label10.Text = "Route";
+            this.label10.Text = "Geo Feature";
             // 
             // label11
             // 
@@ -560,7 +581,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(443, 250);
+            this.tabPage1.Size = new System.Drawing.Size(465, 252);
             this.tabPage1.TabIndex = 3;
             this.tabPage1.Text = "(Debug Info)";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -622,7 +643,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(451, 338);
+            this.ClientSize = new System.Drawing.Size(473, 362);
             this.Controls.Add(this.tabs);
             this.Controls.Add(this.pnlLeft);
             this.Name = "frmMain";
@@ -702,6 +723,8 @@
         private System.Windows.Forms.TextBox txtMainTitle;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtBaseURL;
+        private System.Windows.Forms.Label label17;
     }
 }
 
